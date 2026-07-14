@@ -212,6 +212,10 @@
     opacity:0;transition:opacity .18s ease, transform .18s ease;
   }
   .clip:hover .clip-thumb::after{opacity:1;transform:translate(-50%,-50%) scale(1.06);}
+  .clip-thumb iframe{
+    position:absolute;inset:0;width:100%;height:100%;border:0;
+    pointer-events:none;
+  }
   .clip-body{padding:20px;}
   .clip-title{font-weight:700;font-size:1.05rem;margin-bottom:8px;}
   .clip-meta{
@@ -339,7 +343,7 @@
       <div class="go">YOUTUBE ↗</div>
     </a>
 
-    <a class="clip" href="https://youtu.be/ovXBtf1ylxw" target="_blank" rel="noopener">
+    <a class="clip" data-video-id="ovXBtf1ylxw" href="https://youtu.be/ovXBtf1ylxw" target="_blank" rel="noopener">
       <div class="clip-thumb" style="background-image:url('https://img.youtube.com/vi/ovXBtf1ylxw/hqdefault.jpg')"></div>
       <div class="clip-body">
         <div class="clip-title">Spiderman — Bad</div>
@@ -347,7 +351,7 @@
       </div>
     </a>
 
-    <a class="clip" href="https://youtu.be/Aiu_5T1PsqM" target="_blank" rel="noopener">
+    <a class="clip" data-video-id="Aiu_5T1PsqM" href="https://youtu.be/Aiu_5T1PsqM" target="_blank" rel="noopener">
       <div class="clip-thumb" style="background-image:url('https://img.youtube.com/vi/Aiu_5T1PsqM/hqdefault.jpg')"></div>
       <div class="clip-body">
         <div class="clip-title">Multi-Fandom — 23</div>
@@ -355,7 +359,7 @@
       </div>
     </a>
 
-    <a class="clip" href="https://youtu.be/4DL1qO1oeu8" target="_blank" rel="noopener">
+    <a class="clip" data-video-id="4DL1qO1oeu8" href="https://youtu.be/4DL1qO1oeu8" target="_blank" rel="noopener">
       <div class="clip-thumb" style="background-image:url('https://img.youtube.com/vi/4DL1qO1oeu8/hqdefault.jpg')"></div>
       <div class="clip-body">
         <div class="clip-title">Illuminati — Multi-Fandom</div>
@@ -363,7 +367,7 @@
       </div>
     </a>
 
-    <a class="clip" href="https://youtu.be/GEgX45hPsBs" target="_blank" rel="noopener">
+    <a class="clip" data-video-id="GEgX45hPsBs" href="https://youtu.be/GEgX45hPsBs" target="_blank" rel="noopener">
       <div class="clip-thumb" style="background-image:url('https://img.youtube.com/vi/GEgX45hPsBs/hqdefault.jpg')"></div>
       <div class="clip-body">
         <div class="clip-title">The Batman — Unforgettable</div>
@@ -389,6 +393,30 @@
   <span>SANJAY G — VIDEO EDITOR</span>
   <span>Chennai, India · 2026</span>
 </footer>
+
+<script>
+  document.querySelectorAll('.clip[data-video-id]').forEach(card => {
+    const id = card.dataset.videoId;
+    const thumb = card.querySelector('.clip-thumb');
+    let hoverTimer;
+
+    card.addEventListener('mouseenter', () => {
+      hoverTimer = setTimeout(() => {
+        if (thumb.querySelector('iframe')) return;
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1`;
+        iframe.allow = 'autoplay; encrypted-media';
+        thumb.appendChild(iframe);
+      }, 220); // small delay so a quick mouse pass-over doesn't trigger a load
+    });
+
+    card.addEventListener('mouseleave', () => {
+      clearTimeout(hoverTimer);
+      const iframe = thumb.querySelector('iframe');
+      if (iframe) iframe.remove();
+    });
+  });
+</script>
 
 </body>
 </html>
