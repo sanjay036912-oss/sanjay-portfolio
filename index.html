@@ -14,14 +14,14 @@
 </script>
 <style>
   :root{
-    --bg: #070a12;
-    --panel: #0e1220;
-    --panel-2: #131a2c;
-    --line: #263250;
+    --bg: #121614;
+    --panel: #1a201d;
+    --panel-2: #212a26;
+    --line: #3a4642;
     --text: #e7ecf9;
     --muted: #8590ac;
-    --amber: #4fd8ff;
-    --teal: #8b6cff;
+    --amber: #6fae9f;
+    --teal: #e8ddc7;
     --mono: 'JetBrains Mono', 'Space Mono', 'Courier New', monospace;
     --sans: 'Manrope', 'Inter', -apple-system, sans-serif;
   }
@@ -46,9 +46,9 @@
   }
   .spotlights{
     background:
-      radial-gradient(38vw 60vh at 12% -10%, rgba(79,216,255,.14), transparent 60%),
-      radial-gradient(34vw 55vh at 88% 8%, rgba(139,108,255,.16), transparent 60%),
-      radial-gradient(46vw 60vh at 50% 105%, rgba(79,216,255,.08), transparent 60%);
+      radial-gradient(38vw 60vh at 12% -10%, rgba(111,174,159,.14), transparent 60%),
+      radial-gradient(34vw 55vh at 88% 8%, rgba(232,221,199,.16), transparent 60%),
+      radial-gradient(46vw 60vh at 50% 105%, rgba(111,174,159,.08), transparent 60%);
     transform-origin:50% 0%;
   }
   .vignette{
@@ -70,22 +70,6 @@
 
   ::selection{background:var(--amber);color:#14151a;}
 
-  /* film-strip border framing the page */
-  .filmstrip{
-    position:fixed;left:0;right:0;height:16px;z-index:20;
-    background-color:#1b2032;
-    background-image:
-      radial-gradient(circle, rgba(231,236,249,.28) 3.2px, transparent 3.8px),
-      linear-gradient(180deg, #232a42 0%, #12162480 55%, #0a0d16 100%);
-    background-size:26px 16px, 100% 100%;
-    background-position:center, center;
-    background-repeat:repeat-x, no-repeat;
-    box-shadow:0 0 12px rgba(79,216,255,.10);
-  }
-  .filmstrip.top{top:0;}
-  .filmstrip.bottom{bottom:0;}
-  body{padding-top:16px;padding-bottom:16px;}
-
   /* curtain reveal on load */
   .curtain-left, .curtain-right{
     position:fixed;top:0;bottom:0;width:50.5%;
@@ -100,7 +84,7 @@
     position:fixed;top:0;bottom:0;left:50%;width:2px;
     transform:translateX(-1px);
     background:var(--amber);
-    box-shadow:0 0 24px 4px rgba(79,216,255,.8);
+    box-shadow:0 0 24px 4px rgba(111,174,159,.8);
     z-index:41;pointer-events:none;
     opacity:0;
   }
@@ -136,7 +120,7 @@
   }
   .sprockets span:nth-child(4n){
     width:5px;height:5px;background:var(--teal);
-    box-shadow:0 0 6px rgba(139,108,255,.7);
+    box-shadow:0 0 6px rgba(232,221,199,.7);
   }
 
   header.hero{
@@ -150,7 +134,7 @@
   header.hero::before{
     content:'';
     position:absolute; inset:-2%;
-    background-image:url('posters-bg.jpg');
+    background-image:url('deku-bg.jpg');
     background-size:cover;
     background-position:center 35%;
     filter:saturate(.8) brightness(.4) contrast(1.05);
@@ -160,8 +144,8 @@
     content:'';
     position:absolute; inset:0;
     background:
-      radial-gradient(60vw 55vh at 18% 0%, rgba(139,108,255,.22), transparent 62%),
-      radial-gradient(55vw 50vh at 85% -6%, rgba(79,216,255,.20), transparent 60%),
+      radial-gradient(60vw 55vh at 18% 0%, rgba(232,221,199,.22), transparent 62%),
+      radial-gradient(55vw 50vh at 85% -6%, rgba(111,174,159,.20), transparent 60%),
       linear-gradient(180deg, rgba(7,10,18,.35) 0%, rgba(7,10,18,.55) 55%, var(--bg) 100%);
     z-index:-2;
   }
@@ -185,7 +169,7 @@
     content:'';
     width:8px;height:8px;border-radius:50%;
     background:var(--amber);
-    box-shadow:0 0 0 3px rgba(79,216,255,.18);
+    box-shadow:0 0 0 3px rgba(111,174,159,.18);
   }
   h1.title{
     font-family:var(--mono);
@@ -324,7 +308,7 @@
     content:'';
     position:absolute;top:-60%;left:-30%;
     width:55%;height:220%;
-    background:linear-gradient(115deg, transparent, rgba(79,216,255,.28), transparent);
+    background:linear-gradient(115deg, transparent, rgba(111,174,159,.28), transparent);
     transform:rotate(18deg) translateX(-160%);
     transition:transform .65s ease;
     pointer-events:none;
@@ -480,8 +464,8 @@
     width:150%; height:150%;
     transform:translateX(-50%) rotate(-4deg);
     background:conic-gradient(from 205deg at 50% 0%,
-      transparent 0deg, rgba(139,108,255,.12) 10deg, transparent 24deg,
-      transparent 336deg, rgba(79,216,255,.10) 350deg, transparent 360deg);
+      transparent 0deg, rgba(232,221,199,.12) 10deg, transparent 24deg,
+      transparent 336deg, rgba(111,174,159,.10) 350deg, transparent 360deg);
     filter:blur(3px);
   }
   .film-strip-row{display:none;}
@@ -518,9 +502,6 @@
 </style>
 </head>
 <body>
-
-<div class="filmstrip top"></div>
-<div class="filmstrip bottom"></div>
 
 <div class="curtain-left"></div>
 <div class="curtain-right"></div>
