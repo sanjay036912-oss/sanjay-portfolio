@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjay — Video Editor</title>
+<style>
+  :root{
+    --bg: #14151a;
+    --panel: #1c1e25;
+    --panel-2: #21232c;
+    --line: #33353f;
+    --text: #ece9e2;
+    --muted: #8a8d97;
+    --amber: #e8a33d;
+    --teal: #6fc6b8;
+    --mono: 'JetBrains Mono', 'Space Mono', 'Courier New', monospace;
+    --sans: 'Manrope', 'Inter', -apple-system, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--amber);color:#14151a;}
+
+  /* sprocket divider */
+  .sprockets{
+    display:flex; gap:14px; justify-content:center; padding:18px 0;
+    opacity:.5;
+  }
+  .sprockets span{
+    width:7px;height:7px;border-radius:1px;background:var(--line);
+  }
+
+  header.hero{
+    min-height:100svh;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:8vw 6vw 4vw;
+    position:relative;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:.78rem;
+    letter-spacing:.18em;
+    color:var(--teal);
+    text-transform:uppercase;
+    margin-bottom:22px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:8px;height:8px;border-radius:50%;
+    background:var(--amber);
+    box-shadow:0 0 0 3px rgba(232,163,61,.18);
+  }
+  h1.title{
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:clamp(3rem, 11vw, 8rem);
+    line-height:.92;
+    letter-spacing:-.01em;
+    color:var(--text);
+  }
+  h1.title span{color:var(--amber);}
+  .tagline{
+    margin-top:28px;
+    max-width:540px;
+    font-size:clamp(1.05rem,2vw,1.3rem);
+    color:var(--muted);
+    font-weight:400;
+  }
+  .cta-row{
+    margin-top:44px;
+    display:flex;gap:16px;flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--mono);
+    font-size:.85rem;
+    letter-spacing:.03em;
+    padding:14px 26px;
+    border-radius:2px;
+    text-decoration:none;
+    display:inline-flex;align-items:center;gap:10px;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn-primary{background:var(--amber);color:#14151a;font-weight:700;}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-ghost{border:1px solid var(--line);color:var(--text);}
+  .btn-ghost:hover{border-color:var(--teal);color:var(--teal);}
+
+  /* scrubber bar */
+  .scrubber{
+    position:absolute;bottom:0;left:0;right:0;
+    height:64px;
+    border-top:1px solid var(--line);
+    display:flex;align-items:center;
+    padding:0 6vw;
+    justify-content:space-between;
+    font-family:var(--mono);
+    font-size:.75rem;
+    color:var(--muted);
+  }
+  .scrubber .track{
+    flex:1;height:2px;background:var(--line);
+    margin:0 24px;position:relative;
+  }
+  .scrubber .track::after{
+    content:'';
+    position:absolute;left:0;top:50%;transform:translateY(-50%);
+    width:22%;height:2px;background:var(--amber);
+  }
+  .scrubber .track::before{
+    content:'';
+    position:absolute;left:22%;top:50%;transform:translate(-50%,-50%);
+    width:9px;height:9px;border-radius:50%;background:var(--amber);
+  }
+
+  section{padding:9vw 6vw;border-bottom:1px solid var(--line);}
+  .label{
+    font-family:var(--mono);
+    font-size:.78rem;
+    letter-spacing:.15em;
+    color:var(--teal);
+    text-transform:uppercase;
+    margin-bottom:36px;
+  }
+
+  /* about */
+  .about-grid{
+    display:grid;grid-template-columns:1.3fr 1fr;gap:60px;
+  }
+  .about-grid p{
+    font-size:clamp(1.1rem,1.6vw,1.5rem);
+    color:#d7d5cd;
+    max-width:640px;
+    font-weight:400;
+  }
+  .about-grid p + p{margin-top:20px;color:var(--muted);font-size:1.05rem;}
+  .meta-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:26px;
+    font-family:var(--mono);
+    font-size:.85rem;
+    height:fit-content;
+  }
+  .meta-card .row{
+    display:flex;justify-content:space-between;
+    padding:10px 0;border-bottom:1px solid var(--line);
+    color:var(--muted);
+  }
+  .meta-card .row:last-child{border-bottom:none;}
+  .meta-card .row b{color:var(--text);font-weight:600;}
+
+  /* tools */
+  .tool-rack{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:1px;background:var(--line);
+    border:1px solid var(--line);
+  }
+  .tool{
+    background:var(--panel);padding:28px;
+  }
+  .tool .name{font-size:1.15rem;font-weight:700;margin-bottom:6px;}
+  .tool .tag{
+    font-family:var(--mono);font-size:.72rem;
+    color:var(--amber);letter-spacing:.08em;text-transform:uppercase;
+  }
+  .tool .desc{color:var(--muted);font-size:.92rem;margin-top:10px;}
+
+  /* work */
+  .work-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:22px;
+  }
+  .clip{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:4px;
+    overflow:hidden;
+    text-decoration:none;
+    color:var(--text);
+    display:block;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .clip:hover{border-color:var(--amber);transform:translateY(-3px);}
+  .clip-thumb{
+    height:170px;
+    position:relative;
+    background-size:cover;
+    background-position:center;
+    overflow:hidden;
+  }
+  .clip-thumb::before{
+    content:'';
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(20,21,26,0) 40%, rgba(20,21,26,.75));
+  }
+  .clip-thumb::after{
+    content:'▶';
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    font-size:1.3rem;color:#14151a;
+    width:50px;height:50px;border-radius:50%;background:var(--amber);
+    display:flex;align-items:center;justify-content:center;padding-left:4px;
+    opacity:0;transition:opacity .18s ease, transform .18s ease;
+  }
+  .clip:hover .clip-thumb::after{opacity:1;transform:translate(-50%,-50%) scale(1.06);}
+  .clip-body{padding:20px;}
+  .clip-title{font-weight:700;font-size:1.05rem;margin-bottom:8px;}
+  .clip-meta{
+    font-family:var(--mono);font-size:.75rem;color:var(--muted);
+    display:flex;justify-content:space-between;
+  }
+  .clip-meta .g{color:var(--teal);}
+  .edit-note{
+    font-family:var(--mono);font-size:.68rem;color:#5c5e68;
+    padding:6px 20px 16px;
+  }
+
+  .channel-card{
+    grid-column:1 / -1;
+    display:flex;align-items:center;justify-content:space-between;
+    background:linear-gradient(120deg, var(--panel-2), var(--panel));
+    border:1px solid var(--amber);
+    flex-wrap:wrap;gap:16px;
+  }
+  .channel-card .clip-body{padding:26px 30px;flex:1;}
+  .channel-card .clip-thumb{display:none;}
+  .channel-card .go{
+    font-family:var(--mono);color:var(--amber);font-size:.85rem;
+    padding:26px 30px;white-space:nowrap;
+  }
+
+  /* contact */
+  .contact{
+    display:flex;flex-direction:column;align-items:flex-start;gap:28px;
+  }
+  .contact h2{
+    font-family:var(--mono);
+    font-size:clamp(2rem,5vw,3.4rem);
+    max-width:760px;
+    font-weight:700;
+    line-height:1.15;
+  }
+  .contact h2 span{color:var(--amber);}
+  .contact-links{display:flex;gap:16px;flex-wrap:wrap;}
+
+  footer{
+    padding:30px 6vw;
+    font-family:var(--mono);font-size:.72rem;color:var(--muted);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  }
+
+  @media (max-width:760px){
+    .about-grid{grid-template-columns:1fr;}
+    .scrubber{display:none;}
+    .channel-card{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="eyebrow">Video Editor Portfolio</div>
+  <h1 class="title">SANJAY G<span>.</span></h1>
+  <p class="tagline">Video editor with 4+ years cutting fandom edits and short-form content — 95+ videos across DaVinci Resolve, Premiere Pro, CapCut and Alight Motion.</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="https://www.youtube.com/@joefx1227" target="_blank" rel="noopener">Watch the channel ↗</a>
+    <a class="btn btn-ghost" href="#work">See featured cuts</a>
+  </div>
+  <div class="scrubber">
+    <span>4+ yrs experience</span>
+    <div class="track"></div>
+    <span>95+ videos edited</span>
+  </div>
+</header>
+
+<div class="sprockets"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+<section id="about">
+  <div class="label">// About</div>
+  <div class="about-grid">
+    <div>
+      <p>I cut video the way I'd want to watch it — tight, purposeful, no dead frames. Four years and 95+ videos in, mostly fandom edits and short-form content, built around jump cuts, hooks in the first 3–5 seconds, and pacing that holds attention.</p>
+      <p>Based in Chennai. Comfortable across the full pipeline — colour correction, sound design, motion graphics — and used to shipping fast for YouTube, Shorts, and Reels.</p>
+    </div>
+    <div class="meta-card">
+      <div class="row"><span>ROLE</span><b>Video Editor</b></div>
+      <div class="row"><span>EXPERIENCE</span><b>4+ years</b></div>
+      <div class="row"><span>OUTPUT</span><b>95+ videos</b></div>
+      <div class="row"><span>BASED IN</span><b>Chennai, IN</b></div>
+      <div class="row"><span>CHANNEL</span><b>@joefx1227</b></div>
+    </div>
+  </div>
+</section>
+
+<section id="tools">
+  <div class="label">// Toolkit</div>
+  <div class="tool-rack">
+    <div class="tool">
+      <div class="tag">Color · Finishing</div>
+      <div class="name">DaVinci Resolve</div>
+      <div class="desc">Primary grading, scopes-driven color matching, multicam edits.</div>
+    </div>
+    <div class="tool">
+      <div class="tag">Timeline · Assembly</div>
+      <div class="name">Adobe Premiere Pro</div>
+      <div class="desc">Main cutting room — multi-track edits, sound design, delivery.</div>
+    </div>
+    <div class="tool">
+      <div class="tag">Short-form</div>
+      <div class="name">CapCut / VN Editor</div>
+      <div class="desc">Fast-turnaround shorts and reels, captions, trend-paced cuts.</div>
+    </div>
+    <div class="tool">
+      <div class="tag">Motion</div>
+      <div class="name">After Effects / Alight Motion</div>
+      <div class="desc">Titles, transitions, zoom effects, and mobile-first motion work.</div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="label">// Featured Cuts</div>
+  <div class="work-grid">
+
+    <a class="clip channel-card" href="https://www.youtube.com/@joefx1227" target="_blank" rel="noopener">
+      <div class="clip-body">
+        <div class="clip-title">Full channel — @joefx1227</div>
+        <div class="clip-meta"><span>All uploads, latest first</span></div>
+      </div>
+      <div class="go">YOUTUBE ↗</div>
+    </a>
+
+    <a class="clip" href="https://youtu.be/ovXBtf1ylxw" target="_blank" rel="noopener">
+      <div class="clip-thumb" style="background-image:url('https://img.youtube.com/vi/ovXBtf1ylxw/hqdefault.jpg')"></div>
+      <div class="clip-body">
+        <div class="clip-title">Spiderman — Bad</div>
+        <div class="clip-meta"><span class="g">Premiere Pro</span><span>Jun 2026</span></div>
+      </div>
+    </a>
+
+    <a class="clip" href="https://youtu.be/Aiu_5T1PsqM" target="_blank" rel="noopener">
+      <div class="clip-thumb" style="background-image:url('https://img.youtube.com/vi/Aiu_5T1PsqM/hqdefault.jpg')"></div>
+      <div class="clip-body">
+        <div class="clip-title">Multi-Fandom — 23</div>
+        <div class="clip-meta"><span class="g">DaVinci Resolve</span><span>Feb 2026</span></div>
+      </div>
+    </a>
+
+    <a class="clip" href="https://youtu.be/4DL1qO1oeu8" target="_blank" rel="noopener">
+      <div class="clip-thumb" style="background-image:url('https://img.youtube.com/vi/4DL1qO1oeu8/hqdefault.jpg')"></div>
+      <div class="clip-body">
+        <div class="clip-title">Illuminati — Multi-Fandom</div>
+        <div class="clip-meta"><span class="g">CapCut</span><span>May 2024</span></div>
+      </div>
+    </a>
+
+    <a class="clip" href="https://youtu.be/GEgX45hPsBs" target="_blank" rel="noopener">
+      <div class="clip-thumb" style="background-image:url('https://img.youtube.com/vi/GEgX45hPsBs/hqdefault.jpg')"></div>
+      <div class="clip-body">
+        <div class="clip-title">The Batman — Unforgettable</div>
+        <div class="clip-meta"><span class="g">Alight Motion</span><span>Aug 2022</span></div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section id="contact" style="border-bottom:none;">
+  <div class="label">// Contact</div>
+  <div class="contact">
+    <h2>Have a project to cut? <span>Let's talk.</span></h2>
+    <div class="contact-links">
+      <a class="btn btn-primary" href="mailto:sanjayworkgmail@gmail.com">sanjayworkgmail@gmail.com ↗</a>
+      <a class="btn btn-ghost" href="https://www.youtube.com/@joefx1227" target="_blank" rel="noopener">YouTube ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>SANJAY G — VIDEO EDITOR</span>
+  <span>Chennai, India · 2026</span>
+</footer>
+
+</body>
+</html>
