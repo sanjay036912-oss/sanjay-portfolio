@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sanjay — Video Editor</title>
+<script>
+  // Always land on top of the page on reload — stop the browser from
+  // restoring an old scroll position or jumping to a #hash anchor.
+  if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+  if (window.location.hash) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+</script>
 <style>
   :root{
     --bg: #070a12;
@@ -65,12 +73,14 @@
   /* film-strip border framing the page */
   .filmstrip{
     position:fixed;left:0;right:0;height:16px;z-index:20;
-    background-color:#020306;
-    background-image:radial-gradient(circle, var(--bg) 3.6px, transparent 4px);
-    background-size:26px 16px;
-    background-position:center;
-    background-repeat:repeat-x;
-    box-shadow:0 0 12px rgba(79,216,255,.06);
+    background-color:#1b2032;
+    background-image:
+      radial-gradient(circle, rgba(231,236,249,.28) 3.2px, transparent 3.8px),
+      linear-gradient(180deg, #232a42 0%, #12162480 55%, #0a0d16 100%);
+    background-size:26px 16px, 100% 100%;
+    background-position:center, center;
+    background-repeat:repeat-x, no-repeat;
+    box-shadow:0 0 12px rgba(79,216,255,.10);
   }
   .filmstrip.top{top:0;}
   .filmstrip.bottom{bottom:0;}
@@ -135,6 +145,32 @@
     padding:8vw 6vw 4vw;
     position:relative;
     border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  header.hero::before{
+    content:'';
+    position:absolute; inset:-2%;
+    background-image:url('posters-bg.jpg');
+    background-size:cover;
+    background-position:center 35%;
+    filter:saturate(.8) brightness(.4) contrast(1.05);
+    z-index:-3;
+  }
+  header.hero::after{
+    content:'';
+    position:absolute; inset:0;
+    background:
+      radial-gradient(60vw 55vh at 18% 0%, rgba(139,108,255,.22), transparent 62%),
+      radial-gradient(55vw 50vh at 85% -6%, rgba(79,216,255,.20), transparent 60%),
+      linear-gradient(180deg, rgba(7,10,18,.35) 0%, rgba(7,10,18,.55) 55%, var(--bg) 100%);
+    z-index:-2;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    header.hero::before{animation: kenBurns 26s ease-in-out infinite alternate;}
+  }
+  @keyframes kenBurns{
+    0%{transform:scale(1) translate(0,0);}
+    100%{transform:scale(1.08) translate(-1%,-1%);}
   }
   .eyebrow{
     font-family:var(--mono);
@@ -434,6 +470,46 @@
     transform:translateY(-50%);
   }
 
+  /* film-themed animated hero background */
+  .film-bg{
+    position:absolute; inset:0; z-index:-1;
+    overflow:hidden; pointer-events:none;
+  }
+  .film-bg .beam{
+    position:absolute; top:-25%; left:50%;
+    width:150%; height:150%;
+    transform:translateX(-50%) rotate(-4deg);
+    background:conic-gradient(from 205deg at 50% 0%,
+      transparent 0deg, rgba(139,108,255,.12) 10deg, transparent 24deg,
+      transparent 336deg, rgba(79,216,255,.10) 350deg, transparent 360deg);
+    filter:blur(3px);
+  }
+  .film-strip-row{display:none;}
+  .dust{position:absolute; inset:0;}
+  .dust span{
+    position:absolute; border-radius:50%;
+    background:rgba(231,236,249,.4);
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .film-bg .beam{animation: beamSweep 18s ease-in-out infinite;}
+    .dust span{animation: floatUp linear infinite;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .film-bg{display:none;}
+  }
+  @keyframes beamSweep{
+    0%,100%{transform:translateX(-50%) rotate(-5deg);}
+    50%{transform:translateX(-50%) rotate(5deg);}
+  }
+  @keyframes driftLeft{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @keyframes driftRight{ from{transform:translateX(-50%);} to{transform:translateX(0);} }
+  @keyframes floatUp{
+    0%{transform:translateY(0); opacity:0;}
+    12%{opacity:.7;}
+    88%{opacity:.25;}
+    100%{transform:translateY(-70vh); opacity:0;}
+  }
+
   @media (max-width:760px){
     .about-grid{grid-template-columns:1fr;}
     .scrubber{display:none;}
@@ -455,6 +531,10 @@
 <div class="grain"></div>
 
 <header class="hero">
+  <div class="film-bg" aria-hidden="true">
+    <div class="beam"></div>
+    <div class="dust" id="dust"></div>
+  </div>
   <div class="eyebrow">Video Editor Portfolio</div>
   <h1 class="title">SANJAY G<span>.</span></h1>
   <p class="tagline">Video editor with 4+ years cutting fandom edits and short-form content — 95+ videos across DaVinci Resolve, Premiere Pro, CapCut and Alight Motion.</p>
@@ -577,6 +657,31 @@
   <span>SANJAY G — VIDEO EDITOR</span>
   <span>Chennai, India · 2026</span>
 </footer>
+
+<script>
+  // Scatter a handful of floating dust motes with randomized position/timing
+  const dust = document.getElementById('dust');
+  if (dust) {
+    const count = 22;
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement('span');
+      const size = (Math.random() * 2 + 1.5).toFixed(1);
+      s.style.width = size + 'px';
+      s.style.height = size + 'px';
+      s.style.left = (Math.random() * 100) + '%';
+      s.style.top = (60 + Math.random() * 40) + '%';
+      s.style.animationDuration = (10 + Math.random() * 14) + 's';
+      s.style.animationDelay = (Math.random() * 14) + 's';
+      dust.appendChild(s);
+    }
+  }
+</script>
+
+<script>
+  // Belt-and-braces: make sure a reload always lands at the very top,
+  // regardless of any restored scroll position or hash in the URL.
+  window.addEventListener('load', () => { window.scrollTo(0, 0); });
+</script>
 
 <script>
   const revealObserver = new IntersectionObserver((entries) => {
