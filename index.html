@@ -254,30 +254,40 @@
     font-weight:400;
   }
   .about-grid p + p{margin-top:20px;color:var(--muted);font-size:1.05rem;}
-  .about-photo{
-    margin-top:32px;
-    max-width:520px;
-    border:1px solid var(--line);
-    border-radius:4px;
-    overflow:hidden;
-    position:relative;
+
+  /* section background photos */
+  #about, #tools, #work{position:relative; overflow:hidden;}
+  #about::before, #tools::before, #work::before{
+    content:''; position:absolute; inset:0;
+    background-size:cover; background-position:center;
+    z-index:-2;
   }
-  .about-photo img{
-    display:block; width:100%; height:auto;
-    filter:grayscale(.3) contrast(1.05) brightness(.92);
-    transition:filter .4s ease;
+  #about::after, #tools::after, #work::after{
+    content:''; position:absolute; inset:0;
+    z-index:-1;
   }
-  .about-photo::after{
-    content:'';
-    position:absolute; inset:0;
-    background:linear-gradient(160deg, rgba(111,174,159,.16), transparent 55%);
-    pointer-events:none;
+  #about::before{
+    background-image:url('about-bg.jpg');
+    background-position:center 30%;
+    filter:saturate(.75) brightness(.28) contrast(1.05);
   }
-  .about-photo:hover img{filter:grayscale(0) contrast(1.05) brightness(.98);}
-  .about-photo .cap{
-    font-family:var(--mono); font-size:.68rem; color:var(--muted);
-    letter-spacing:.06em; padding:10px 14px; border-top:1px solid var(--line);
-    background:var(--panel);
+  #about::after{
+    background:linear-gradient(180deg, rgba(18,22,20,.55) 0%, rgba(18,22,20,.82) 100%);
+  }
+  #tools::before{
+    background-image:url('toolkit-bg.jpg');
+    filter:saturate(.6) brightness(.3) contrast(1.05);
+  }
+  #tools::after{
+    background:linear-gradient(180deg, rgba(18,22,20,.5) 0%, rgba(18,22,20,.78) 100%);
+  }
+  #work::before{
+    background-image:url('work-bg.jpg');
+    background-position:center 38%;
+    filter:saturate(.8) brightness(.32) contrast(1.05);
+  }
+  #work::after{
+    background:linear-gradient(180deg, rgba(18,22,20,.5) 0%, rgba(18,22,20,.8) 100%);
   }
   .meta-card{
     background:var(--panel);
@@ -582,10 +592,6 @@
     <div class="reveal" style="--i:0">
       <p>I cut video the way I'd want to watch it — tight, purposeful, no dead frames. Four years and 95+ videos in, mostly fandom edits and short-form content, built around jump cuts, hooks in the first 3–5 seconds, and pacing that holds attention.</p>
       <p>Based in Chennai. Comfortable across the full pipeline — colour correction, sound design, motion graphics — and used to shipping fast for YouTube, Shorts, and Reels.</p>
-      <div class="about-photo">
-        <img src="about-photo.jpg" alt="Reviewing film negatives on a lightbox" loading="lazy">
-        <div class="cap">ON THE LIGHTBOX — reviewing frames</div>
-      </div>
     </div>
     <div class="meta-card reveal" style="--i:1">
       <div class="row"><span>ROLE</span><b>Video Editor</b></div>
