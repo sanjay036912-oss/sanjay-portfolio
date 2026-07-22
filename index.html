@@ -260,7 +260,11 @@
   .about-grid p + p{margin-top:20px;color:var(--muted);font-size:1.05rem;}
 
   /* showreel */
-  #reel{padding-top:0; position:relative; overflow:hidden;}
+  #reel{
+    padding-top:0; position:relative; overflow:hidden;
+    min-height:100vh;
+    display:flex; flex-direction:column; justify-content:center;
+  }
   #reel::before{
     content:''; position:absolute; inset:0;
     background-image:url('reel-bg.jpg');
@@ -280,17 +284,19 @@
     display:grid;
     grid-template-columns:minmax(200px, 300px) 1fr;
     gap:16px;
-    align-items:stretch;
+    height:min(66vh, 640px);
   }
   .reel-portrait-group{
     display:flex;
     flex-direction:column;
     gap:16px;
+    height:100%;
   }
   .reel-landscape-group{
     display:flex;
     flex-direction:column;
     gap:16px;
+    height:100%;
   }
   .reel-frame{
     position:relative;
@@ -298,14 +304,13 @@
     border-radius:6px;
     overflow:hidden;
     background:var(--panel);
-  }
-  .reel-frame--portrait .reel-video{
-    aspect-ratio:9/16;
+    flex:1;
+    min-height:0;
   }
   .reel-video{
     position:relative;
     width:100%;
-    aspect-ratio:16/9;
+    height:100%;
     background:#000;
     overflow:hidden;
   }
@@ -330,8 +335,12 @@
   .reel-caption a{color:var(--amber);text-decoration:none;}
   .reel-caption a:hover{text-decoration:underline;}
   @media (max-width:820px){
-    .reel-strip{grid-template-columns:1fr;}
-    .reel-frame--portrait .reel-video{aspect-ratio:9/16; height:auto;}
+    #reel{min-height:0;}
+    .reel-strip{grid-template-columns:1fr; height:auto;}
+    .reel-portrait-group, .reel-landscape-group{height:auto;}
+    .reel-frame{flex:none;}
+    .reel-video{aspect-ratio:16/9; height:auto;}
+    .reel-frame--portrait .reel-video{aspect-ratio:9/16;}
   }
 
   /* section background photos */
@@ -668,8 +677,8 @@
   <div class="reel-strip reveal-stagger">
     <div class="reel-portrait-group">
       <div class="reel-frame reel-frame--portrait" style="--i:0">
-        <div class="reel-video" data-video-id="NsUqQGu8KS0">
-          <img class="reel-poster" src="https://img.youtube.com/vi/NsUqQGu8KS0/hqdefault.jpg" alt="Showreel short preview" loading="lazy">
+        <div class="reel-video" data-video-id="K2sT5RoeqSE">
+          <img class="reel-poster" src="https://img.youtube.com/vi/K2sT5RoeqSE/hqdefault.jpg" alt="Showreel short preview" loading="lazy">
         </div>
       </div>
       <div class="reel-frame" style="--i:1">
