@@ -26,7 +26,7 @@
     --sans: 'Manrope', 'Inter', -apple-system, sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; scrollbar-gutter:stable;}
   body{
     background:var(--bg);
     color:var(--text);
@@ -258,6 +258,41 @@
     font-weight:400;
   }
   .about-grid p + p{margin-top:20px;color:var(--muted);font-size:1.05rem;}
+
+  /* showreel */
+  #reel{padding-top:0;}
+  .reel-frame{
+    position:relative;
+    border:1px solid var(--line);
+    border-radius:6px;
+    overflow:hidden;
+    background:var(--panel);
+  }
+  .reel-video{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    background:#000;
+    overflow:hidden;
+  }
+  .reel-poster{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;
+    transition:opacity .3s ease;
+  }
+  .reel-video.is-playing .reel-poster{opacity:0;}
+  .reel-video iframe{
+    position:absolute;inset:0;width:100%;height:100%;border:0;
+    pointer-events:none;
+  }
+  .reel-caption{
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    padding:16px 20px;
+    font-family:var(--mono);font-size:.75rem;color:var(--muted);
+    border-top:1px solid var(--line);
+  }
+  .reel-caption a{color:var(--amber);text-decoration:none;}
+  .reel-caption a:hover{text-decoration:underline;}
 
   /* section background photos */
   #about, #tools, #work{position:relative; overflow:hidden;}
@@ -588,6 +623,19 @@
   <div class="comet"></div>
 </header>
 
+<section id="reel">
+  <div class="label reveal">// Showreel</div>
+  <div class="reel-frame reveal">
+    <div class="reel-video" data-video-id="Aiu_5T1PsqM">
+      <img class="reel-poster" src="https://img.youtube.com/vi/Aiu_5T1PsqM/hqdefault.jpg" alt="Showreel preview" loading="lazy">
+    </div>
+    <div class="reel-caption">
+      <span>Plays automatically as it scrolls into view</span>
+      <a href="https://www.youtube.com/@joefx1227" target="_blank" rel="noopener">Full channel ↗</a>
+    </div>
+  </div>
+</section>
+
 <div class="sprockets reveal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
 <section id="about">
@@ -732,6 +780,34 @@
   }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+</script>
+
+<script>
+  // Showreel: load and play the embed only while it's in view, and
+  // stop it once it scrolls away — keeps things light and avoids
+  // audio/video running in the background off-screen.
+  const reelVideo = document.querySelector('.reel-video[data-video-id]');
+  if (reelVideo) {
+    const reelId = reelVideo.dataset.videoId;
+    const reelObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (!reelVideo.querySelector('iframe')) {
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${reelId}?autoplay=1&mute=1&loop=1&playlist=${reelId}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1`;
+            iframe.allow = 'autoplay; encrypted-media';
+            reelVideo.appendChild(iframe);
+          }
+          reelVideo.classList.add('is-playing');
+        } else {
+          reelVideo.classList.remove('is-playing');
+          const iframe = reelVideo.querySelector('iframe');
+          if (iframe) iframe.remove();
+        }
+      });
+    }, { threshold: 0.4 });
+    reelObserver.observe(reelVideo);
+  }
 </script>
 
 <script>
