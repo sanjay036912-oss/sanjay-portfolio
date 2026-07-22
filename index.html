@@ -278,7 +278,13 @@
   }
   .reel-strip{
     display:grid;
-    grid-template-columns:repeat(4, 1fr);
+    grid-template-columns:minmax(200px, 300px) 1fr;
+    gap:16px;
+    align-items:stretch;
+  }
+  .reel-landscape-group{
+    display:flex;
+    flex-direction:column;
     gap:16px;
   }
   .reel-frame{
@@ -288,10 +294,19 @@
     overflow:hidden;
     background:var(--panel);
   }
+  .reel-frame--portrait{
+    display:flex;
+    height:100%;
+  }
+  .reel-frame--portrait .reel-video{
+    aspect-ratio:auto;
+    height:100%;
+    flex:1;
+  }
   .reel-video{
     position:relative;
     width:100%;
-    aspect-ratio:9/16;
+    aspect-ratio:16/9;
     background:#000;
     overflow:hidden;
   }
@@ -313,7 +328,8 @@
   .reel-caption a{color:var(--amber);text-decoration:none;}
   .reel-caption a:hover{text-decoration:underline;}
   @media (max-width:820px){
-    .reel-strip{grid-template-columns:repeat(2, 1fr);}
+    .reel-strip{grid-template-columns:1fr;}
+    .reel-frame--portrait .reel-video{aspect-ratio:9/16; height:auto;}
   }
 
   /* section background photos */
@@ -648,24 +664,26 @@
 <section id="reel">
   <div class="label reveal">// Showreel</div>
   <div class="reel-strip reveal-stagger">
-    <div class="reel-frame" style="--i:0">
+    <div class="reel-frame reel-frame--portrait" style="--i:0">
       <div class="reel-video" data-video-id="NsUqQGu8KS0">
-        <img class="reel-poster" src="https://img.youtube.com/vi/NsUqQGu8KS0/hqdefault.jpg" alt="Showreel clip preview" loading="lazy">
+        <img class="reel-poster" src="https://img.youtube.com/vi/NsUqQGu8KS0/hqdefault.jpg" alt="Showreel short preview" loading="lazy">
       </div>
     </div>
-    <div class="reel-frame" style="--i:1">
-      <div class="reel-video" data-video-id="lAb3vB1RaLE">
-        <img class="reel-poster" src="https://img.youtube.com/vi/lAb3vB1RaLE/hqdefault.jpg" alt="Showreel clip preview" loading="lazy">
+    <div class="reel-landscape-group">
+      <div class="reel-frame" style="--i:1">
+        <div class="reel-video" data-video-id="lAb3vB1RaLE">
+          <img class="reel-poster" src="https://img.youtube.com/vi/lAb3vB1RaLE/hqdefault.jpg" alt="Showreel clip preview" loading="lazy">
+        </div>
       </div>
-    </div>
-    <div class="reel-frame" style="--i:2">
-      <div class="reel-video" data-video-id="fP0XsJ5G3cA">
-        <img class="reel-poster" src="https://img.youtube.com/vi/fP0XsJ5G3cA/hqdefault.jpg" alt="Showreel clip preview" loading="lazy">
+      <div class="reel-frame" style="--i:2">
+        <div class="reel-video" data-video-id="fP0XsJ5G3cA">
+          <img class="reel-poster" src="https://img.youtube.com/vi/fP0XsJ5G3cA/hqdefault.jpg" alt="Showreel clip preview" loading="lazy">
+        </div>
       </div>
-    </div>
-    <div class="reel-frame" style="--i:3">
-      <div class="reel-video" data-video-id="ovXBtf1ylxw">
-        <img class="reel-poster" src="https://img.youtube.com/vi/ovXBtf1ylxw/hqdefault.jpg" alt="Showreel clip preview" loading="lazy">
+      <div class="reel-frame" style="--i:3">
+        <div class="reel-video" data-video-id="ovXBtf1ylxw">
+          <img class="reel-poster" src="https://img.youtube.com/vi/ovXBtf1ylxw/hqdefault.jpg" alt="Showreel clip preview" loading="lazy">
+        </div>
       </div>
     </div>
   </div>
