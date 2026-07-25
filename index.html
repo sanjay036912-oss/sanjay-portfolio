@@ -283,7 +283,7 @@
   .reel-scatter{
     position:relative;
     width:100%;
-    min-height:760px;
+    min-height:900px;
   }
   .reel-frame{
     position:absolute;
@@ -714,10 +714,8 @@
         <img class="reel-poster" src="https://img.youtube.com/vi/ovXBtf1ylxw/hqdefault.jpg" alt="Showreel clip preview" loading="lazy">
       </div>
     </div>
-    <div class="reel-frame" style="--i:9; width:310px; top:64%; left:70%; transform:rotate(4deg);">
-      <div class="reel-video ratio-landscape" data-video-id="2ym-u2VtTlE">
-        <img class="reel-poster" src="https://img.youtube.com/vi/2ym-u2VtTlE/hqdefault.jpg" alt="Showreel clip preview" loading="lazy">
-      </div>
+    <div class="reel-frame" style="--i:10; width:170px; top:26%; left:86%; transform:rotate(3deg);">
+      <div class="reel-video ratio-portrait" data-video-id="1hPOQ5Fb5AsngsI-DHS2ohZ-8k_Ibs5EP" data-source="gdrive"></div>
     </div>
   </div>
   <div class="reel-caption">
@@ -846,8 +844,8 @@
       s.style.height = size + 'px';
       s.style.left = (Math.random() * 100) + '%';
       s.style.top = (60 + Math.random() * 40) + '%';
-      s.style.animationDuration = (10 + Math.random() * 14) + 's';
-      s.style.animationDelay = (Math.random() * 14) + 's';
+      s.style.animationDuration = (4 + Math.random() * 4) + 's';
+      s.style.animationDelay = (Math.random() * 0.8) + 's';
       dust.appendChild(s);
     }
   }
@@ -880,11 +878,17 @@
     entries.forEach(entry => {
       const reelVideo = entry.target;
       const reelId = reelVideo.dataset.videoId;
+      const source = reelVideo.dataset.source || 'youtube';
       if (entry.isIntersecting) {
         if (!reelVideo.querySelector('iframe')) {
           const iframe = document.createElement('iframe');
-          iframe.src = `https://www.youtube.com/embed/${reelId}?autoplay=1&mute=1&loop=1&playlist=${reelId}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1`;
-          iframe.allow = 'autoplay; encrypted-media';
+          if (source === 'gdrive') {
+            iframe.src = `https://drive.google.com/file/d/${reelId}/preview`;
+            iframe.allow = 'autoplay';
+          } else {
+            iframe.src = `https://www.youtube.com/embed/${reelId}?autoplay=1&mute=1&loop=1&playlist=${reelId}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1`;
+            iframe.allow = 'autoplay; encrypted-media';
+          }
           reelVideo.appendChild(iframe);
         }
         reelVideo.classList.add('is-playing');
