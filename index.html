@@ -321,7 +321,7 @@
   .reel-video.is-playing .reel-poster{opacity:0;}
   .reel-video iframe{
     position:absolute; top:50%; left:50%;
-    width:160%; height:160%;
+    width:145%; height:145%;
     transform:translate(-50%,-50%);
     border:0;
     pointer-events:none;
@@ -463,10 +463,7 @@
   }
   .clip:hover .clip-thumb::after{opacity:1;transform:translate(-50%,-50%) scale(1.06);}
   .clip-thumb iframe{
-    position:absolute; top:50%; left:50%;
-    width:115%; height:115%;
-    transform:translate(-50%,-50%);
-    border:0;
+    position:absolute;inset:0;width:100%;height:100%;border:0;
     pointer-events:none;
   }
   .clip-body{padding:20px;}
@@ -929,7 +926,7 @@
             iframe.src = `https://drive.google.com/file/d/${reelId}/preview`;
             iframe.allow = 'autoplay';
           } else {
-            iframe.src = `https://www.youtube.com/embed/${reelId}?autoplay=1&mute=1&loop=1&playlist=${reelId}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1&fs=0&disablekb=1&iv_load_policy=3&cc_load_policy=0`;
+            iframe.src = `https://www.youtube.com/embed/${reelId}?autoplay=1&mute=1&loop=1&playlist=${reelId}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1`;
             iframe.allow = 'autoplay; encrypted-media';
           }
           reelVideo.appendChild(iframe);
@@ -955,7 +952,7 @@
       hoverTimer = setTimeout(() => {
         if (thumb.querySelector('iframe')) return;
         const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1&fs=0&disablekb=1&iv_load_policy=3&cc_load_policy=0`;
+        iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1`;
         iframe.allow = 'autoplay; encrypted-media';
         thumb.appendChild(iframe);
       }, 220); // small delay so a quick mouse pass-over doesn't trigger a load
