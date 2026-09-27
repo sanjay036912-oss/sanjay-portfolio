@@ -12,28 +12,6 @@
     history.replaceState(null, '', window.location.pathname + window.location.search);
   }
 </script>
-<script>
-  // Pick a random palette on every load — runs before paint so there's
-  // no flash of the default colors. Backgrounds are tinted to match
-  // each accent pair; text/muted stay fixed since they read fine
-  // against every variant here.
-  var palettes = [
-    { amber: '#6fae9f', teal: '#e8ddc7', bg: '#121614', panel: '#1a201d', panel2: '#212a26', line: '#3a4642' }, // sage / cream (default)
-    { amber: '#d98a4e', teal: '#f2c94c', bg: '#16120e', panel: '#201a15', panel2: '#2a2118', line: '#46392f' }, // amber / gold
-    { amber: '#c5533f', teal: '#e8c468', bg: '#160f0e', panel: '#211613', panel2: '#2b1c17', line: '#4a2f28' }, // crimson / gold
-    { amber: '#4f8fd9', teal: '#cfe8e6', bg: '#0d1318', panel: '#16232a', panel2: '#1c2e36', line: '#2f4652' }, // steel blue / ice
-    { amber: '#9c6fd9', teal: '#f2b6c9', bg: '#140f18', panel: '#1e1624', panel2: '#281c30', line: '#453056' }, // violet / rose
-    { amber: '#4fae7a', teal: '#e8ddc7', bg: '#0f1613', panel: '#17211c', panel2: '#1e2b24', line: '#33473c' }  // emerald / cream
-  ];
-  var pick = palettes[Math.floor(Math.random() * palettes.length)];
-  var root = document.documentElement.style;
-  root.setProperty('--amber', pick.amber);
-  root.setProperty('--teal', pick.teal);
-  root.setProperty('--bg', pick.bg);
-  root.setProperty('--panel', pick.panel);
-  root.setProperty('--panel-2', pick.panel2);
-  root.setProperty('--line', pick.line);
-</script>
 <style>
   :root{
     --bg: #121614;
@@ -343,7 +321,7 @@
   .reel-video.is-playing .reel-poster{opacity:0;}
   .reel-video iframe{
     position:absolute; top:50%; left:50%;
-    width:145%; height:145%;
+    width:160%; height:160%;
     transform:translate(-50%,-50%);
     border:0;
     pointer-events:none;
@@ -485,7 +463,10 @@
   }
   .clip:hover .clip-thumb::after{opacity:1;transform:translate(-50%,-50%) scale(1.06);}
   .clip-thumb iframe{
-    position:absolute;inset:0;width:100%;height:100%;border:0;
+    position:absolute; top:50%; left:50%;
+    width:115%; height:115%;
+    transform:translate(-50%,-50%);
+    border:0;
     pointer-events:none;
   }
   .clip-body{padding:20px;}
@@ -948,7 +929,7 @@
             iframe.src = `https://drive.google.com/file/d/${reelId}/preview`;
             iframe.allow = 'autoplay';
           } else {
-            iframe.src = `https://www.youtube.com/embed/${reelId}?autoplay=1&mute=1&loop=1&playlist=${reelId}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1`;
+            iframe.src = `https://www.youtube.com/embed/${reelId}?autoplay=1&mute=1&loop=1&playlist=${reelId}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1&fs=0&disablekb=1&iv_load_policy=3&cc_load_policy=0`;
             iframe.allow = 'autoplay; encrypted-media';
           }
           reelVideo.appendChild(iframe);
@@ -974,7 +955,7 @@
       hoverTimer = setTimeout(() => {
         if (thumb.querySelector('iframe')) return;
         const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1`;
+        iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1&fs=0&disablekb=1&iv_load_policy=3&cc_load_policy=0`;
         iframe.allow = 'autoplay; encrypted-media';
         thumb.appendChild(iframe);
       }, 220); // small delay so a quick mouse pass-over doesn't trigger a load
